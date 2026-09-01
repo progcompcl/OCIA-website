@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { objectives } from '../data/content.ts';
+---
+
+<BaseLayout
+  title="Objetivos"
+  description="Los objetivos de la Olimpiada Chilena de Inteligencia Artificial: alfabetización en IA, detección de talentos y pensamiento crítico."
+>
+  <PageHero
+    eyebrow="Objetivos"
+    title="Para qué existe la OCIA"
+    lead="La OCIA combina un propósito educativo amplio con la misión de formar y seleccionar a la próxima generación de talentos en inteligencia artificial."
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <ol class="obj-list">
+        {
+          objectives.map((o, i) => (
+            <li class="obj-list__item">
+              <span class="obj-list__num">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h2>{o.title}</h2>
+                <p>{o.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .obj-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.4rem;
+    counter-reset: none;
+  }
+  .obj-list__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.2rem;
+    align-items: start;
+    padding: 1.4rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .obj-list__item:first-child {
+    border-top: none;
+  }
+  .obj-list__num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: transparent;
+    background: var(--grad-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .obj-list h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
+  }
+  .obj-list p {
+    color: var(--ink-soft);
+    max-width: 60ch;
+  }
+</style>

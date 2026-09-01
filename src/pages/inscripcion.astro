@@ -1,0 +1,174 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Callout from '../components/Callout.astro';
+import { site } from '../data/site.ts';
+
+const formReady = !site.registerFormEmbedUrl.includes('REEMPLAZAR');
+
+const checklist = [
+  'Nombre completo del o la estudiante.',
+  'Correo electrónico de contacto (idealmente uno que revises con frecuencia).',
+  'Categoría: Enseñanza Básica, Enseñanza Media o Categoría Libre.',
+  'Curso actual (para Enseñanza Básica y Media).',
+  'Región, comuna y nombre del establecimiento educacional.',
+  'Si eres menor de edad: nombre y correo de tu madre, padre o apoderado/a.',
+];
+---
+
+<BaseLayout
+  title="Inscripción"
+  description="Inscríbete en la Olimpiada Chilena de Inteligencia Artificial. La inscripción es gratuita y se realiza en línea."
+>
+  <PageHero
+    eyebrow="Inscripción"
+    title="Inscríbete en la OCIA"
+    lead="La inscripción es gratuita y se realiza en línea. Está abierta a estudiantes de 7° básico a 4° medio, y a docentes y público general en la Categoría Libre."
+  />
+
+  <section class="section">
+    <div class="wrap insc">
+      <div class="insc__side">
+        <h2>Antes de empezar</h2>
+        <p>Ten a mano estos datos para completar el formulario en pocos minutos:</p>
+        <ul class="insc__check">
+          {checklist.map((item) => <li>{item}</li>)}
+        </ul>
+
+        <Callout title="Documentación" tone="note">
+          La cédula de identidad y el certificado de alumno/a regular se solicitarán más adelante, al
+          llegar a la Fase 3. No necesitas subir documentos para inscribirte.
+        </Callout>
+
+        <Callout title="Estudiantes menores de edad">
+          Al inscribir a una persona menor de edad, se requiere el consentimiento de su madre, padre o
+          apoderado/a, junto con un correo de contacto de esa persona.
+        </Callout>
+
+        <p class="insc__help">
+          ¿Tienes dudas? Escríbenos a <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+      </div>
+
+      <div class="insc__form">
+        {
+          formReady ? (
+            <iframe
+              src={site.registerFormEmbedUrl}
+              title="Formulario de inscripción de la OCIA"
+              loading="lazy"
+              class="insc__iframe"
+            >
+              Cargando formulario…
+            </iframe>
+          ) : (
+            <div class="insc__placeholder">
+              <p class="insc__placeholder-title">Formulario en preparación</p>
+              <p>
+                El formulario de inscripción se habilitará aquí. Reemplaza
+                <code>registerFormUrl</code> y <code>registerFormEmbedUrl</code> en
+                <code>src/data/site.ts</code> con los enlaces del Google Form.
+              </p>
+            </div>
+          )
+        }
+
+        {
+          formReady && (
+            <p class="insc__fallback">
+              <a class="btn btn--primary" href={site.registerFormUrl} target="_blank" rel="noopener">
+                Abrir el formulario en una pestaña nueva
+              </a>
+            </p>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .insc {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 6vw, 3.5rem);
+    align-items: start;
+  }
+  .insc__side h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.6rem;
+  }
+  .insc__side > p {
+    color: var(--ink-soft);
+  }
+  .insc__check {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 1.6rem;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .insc__check li {
+    position: relative;
+    padding-left: 1.6rem;
+    color: var(--ink-soft);
+    font-size: 0.94rem;
+  }
+  .insc__check li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.45em;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--grad-brand);
+  }
+  .insc__side :global(.callout) {
+    margin-top: 1rem;
+  }
+  .insc__help {
+    margin-top: 1.4rem;
+    font-size: 0.92rem;
+    color: var(--ink-mute);
+  }
+
+  .insc__iframe {
+    width: 100%;
+    min-height: 900px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--paper);
+  }
+  .insc__placeholder {
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    background: var(--paper-alt);
+    color: var(--ink-soft);
+  }
+  .insc__placeholder-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+  .insc__placeholder code {
+    background: var(--paper-tint);
+    padding: 0.1em 0.35em;
+    border-radius: 5px;
+    font-size: 0.88em;
+  }
+  .insc__fallback {
+    margin-top: 1.2rem;
+  }
+
+  @media (max-width: 880px) {
+    .insc {
+      grid-template-columns: 1fr;
+    }
+    .insc__iframe {
+      min-height: 800px;
+    }
+  }
+</style>

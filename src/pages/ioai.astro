@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+
+const editions = [
+  { year: '2024', place: 'Burgas, Bulgaria', note: 'Primera edición' },
+  { year: '2025', place: 'Beijing, China', note: 'Segunda edición' },
+  { year: '2026', place: 'Astaná, Kazajistán', note: '2 al 8 de agosto' },
+  { year: '2027', place: 'Singapur', note: 'Meta del Equipo Chile' },
+];
+---
+
+<BaseLayout
+  title="La IOAI"
+  description="Qué es la Olimpiada Internacional de Inteligencia Artificial (IOAI) y cómo la OCIA selecciona al equipo chileno."
+>
+  <PageHero
+    eyebrow="Olimpiada internacional"
+    title="La IOAI"
+    lead="La Olimpiada Internacional de Inteligencia Artificial es la olimpiada científica internacional más reciente del mundo. La OCIA es el camino de Chile hacia ella."
+  />
+
+  <section class="section">
+    <div class="wrap prose">
+      <p class="lead">
+        La <strong>IOAI</strong> reúne a estudiantes de enseñanza media de decenas de países en una
+        competencia anual sobre inteligencia artificial, acompañada de un programa académico y social.
+        Cada país selecciona a sus representantes mediante su propia olimpiada nacional.
+      </p>
+
+      <h2>Cómo es la competencia</h2>
+      <p>La IOAI combina varias instancias:</p>
+      <ul>
+        <li>
+          <strong>Ronda científica:</strong> problemas de aprendizaje automático, aprendizaje
+          profundo, procesamiento de lenguaje natural y visión por computador.
+        </li>
+        <li><strong>Ronda práctica:</strong> resolución de tareas aplicadas con herramientas de IA.</li>
+        <li><strong>Desafío en equipo:</strong> una componente colaborativa entre integrantes.</li>
+      </ul>
+      <p>
+        El temario científico oficial se publica para cada edición en el sitio de la organización
+        internacional.
+      </p>
+
+      <h2>Ediciones</h2>
+    </div>
+
+    <div class="wrap">
+      <div class="grid grid--3 editions">
+        {
+          editions.map((e) => (
+            <div class="card edition">
+              <span class="edition__year">{e.year}</span>
+              <p class="edition__place">{e.place}</p>
+              <p class="edition__note">{e.note}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="wrap prose">
+      <h2>El rol de la OCIA</h2>
+      <p>
+        La OCIA es la instancia nacional, reconocida por el comité de la IOAI, que forma y selecciona
+        al <strong>Equipo Chile</strong>: las 4 mejores personas de la Fase 4 de entrenamiento.
+        <a href="/acerca/">Más sobre la OCIA →</a>
+      </p>
+      <p>
+        Sitio oficial de la IOAI:
+        <a href="https://ioai-official.org">ioai-official.org</a>.
+      </p>
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .editions {
+    margin: 1.5rem 0 2.5rem;
+  }
+  .edition__year {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: transparent;
+    background: var(--grad-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .edition__place {
+    font-weight: 600;
+    margin-top: 0.3rem;
+  }
+  .edition__note {
+    font-size: 0.88rem;
+    color: var(--ink-mute);
+  }
+</style>

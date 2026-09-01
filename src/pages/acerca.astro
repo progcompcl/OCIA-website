@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Callout from '../components/Callout.astro';
+import { support } from '../data/content.ts';
+---
+
+<BaseLayout
+  title="Acerca de la OCIA"
+  description="Qué es la Olimpiada Chilena de Inteligencia Artificial, quién la organiza y cómo se conecta con la olimpiada internacional."
+>
+  <PageHero
+    eyebrow="Acerca"
+    title="Qué es la OCIA"
+    lead="Una iniciativa educativa y científica para llevar la inteligencia artificial a la comunidad escolar de todo Chile."
+  />
+
+  <section class="section">
+    <div class="wrap prose">
+      <p class="lead">
+        La <strong>Olimpiada Chilena de Inteligencia Artificial (OCIA)</strong> es una competencia
+        nacional, <strong>gratuita y voluntaria</strong>, dirigida a estudiantes de enseñanza básica y
+        media. Su propósito es promover la alfabetización en inteligencia artificial, revelar talentos
+        y seleccionar al equipo que representará a Chile en la <strong>Olimpiada Internacional de
+        Inteligencia Artificial (IOAI)</strong>.
+      </p>
+
+      <p>
+        La OCIA se estructura en <strong>cuatro fases</strong> organizadas en dos ciclos. El Ciclo
+        Básico está abierto a cualquier persona y se rinde en línea; el Ciclo Preparatorio reúne a
+        quienes avanzan y culmina con el entrenamiento del Equipo Chile. No se requieren conocimientos
+        previos para comenzar.
+      </p>
+
+      <h2>Quién organiza</h2>
+      <p>
+        La OCIA es organizada por la <strong>{support.organizer.name}</strong>. {support.organizer.text}
+      </p>
+
+      <Callout title="Reconocimiento de la IOAI">
+        {support.accreditation}
+      </Callout>
+
+      <h2>Cómo se llega a la IOAI</h2>
+      <p>
+        Quienes participan avanzan de fase en fase según su desempeño. En la Fase 4, un entrenamiento
+        con especialistas prepara a las y los finalistas con problemas de nivel internacional. Las 4
+        mejores personas conforman el <strong>Equipo Chile</strong> para la IOAI 2027, que se
+        realizará en Singapur.
+      </p>
+      <p>
+        <a href="/ioai/">Conoce más sobre la olimpiada internacional →</a>
+      </p>
+
+      <h2>Inspiración</h2>
+      <p>
+        La estructura de la OCIA se inspira en la
+        <a href="https://www.oniabrasil.com.br">Olimpíada Nacional de Inteligência Artificial (ONIA)</a>
+        de Brasil, adaptada al contexto y al sistema escolar chileno.
+      </p>
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>

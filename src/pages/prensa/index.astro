@@ -1,0 +1,97 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBanner from '../../components/CtaBanner.astro';
+
+const noticias = (await getCollection('noticias', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const dateFmt = new Intl.DateTimeFormat('es-CL', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<BaseLayout
+  title="Prensa"
+  description="Noticias, comunicados y guías de la Olimpiada Chilena de Inteligencia Artificial."
+>
+  <PageHero
+    eyebrow="Prensa"
+    title="Noticias y comunicados"
+    lead="Novedades sobre la OCIA: anuncios, guías para participantes y resultados."
+  />
+
+  <section class="section">
+    <div class="wrap">
+      {
+        noticias.length === 0 ? (
+          <p class="lead">Aún no hay noticias publicadas.</p>
+        ) : (
+          <div class="news-list">
+            {noticias.map((n) => (
+              <a class="news-item" href={`/prensa/${n.id}/`}>
+                <div class="news-item__meta">
+                  <span class="pill">{n.data.tag}</span>
+                  <time datetime={n.data.date.toISOString()}>{dateFmt.format(n.data.date)}</time>
+                </div>
+                <h2>{n.data.title}</h2>
+                <p>{n.data.summary}</p>
+                <span class="news-item__more">Leer más →</span>
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .news-list {
+    display: grid;
+    gap: 1rem;
+  }
+  .news-item {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.3rem, 3vw, 1.8rem);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+  }
+  .news-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .news-item__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.7rem;
+  }
+  .news-item__meta time {
+    font-size: 0.83rem;
+    color: var(--ink-mute);
+  }
+  .news-item h2 {
+    font-size: 1.25rem;
+  }
+  .news-item p {
+    margin-top: 0.4rem;
+    color: var(--ink-soft);
+    max-width: 66ch;
+  }
+  .news-item__more {
+    display: inline-block;
+    margin-top: 0.8rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--brand-600);
+    font-size: 0.9rem;
+  }
+</style>

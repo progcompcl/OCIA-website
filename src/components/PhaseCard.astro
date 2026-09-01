@@ -1,0 +1,98 @@
+---
+import type { Phase } from '../data/phases.ts';
+interface Props {
+  phase: Phase;
+}
+const { phase } = Astro.props;
+---
+
+<article class="phase-card" id={phase.id}>
+  <header class="phase-card__head">
+    <span class="phase-card__num">Fase {phase.number}</span>
+    <span class:list={['phase-card__status', phase.status === 'confirmada' ? 'is-ok' : 'is-tbd']}>
+      {phase.status === 'confirmada' ? 'Fechas confirmadas' : 'Fechas por confirmar'}
+    </span>
+  </header>
+
+  <h3>{phase.name}</h3>
+  <p class="phase-card__dates">{phase.dates}</p>
+  <p class="phase-card__format">{phase.format}</p>
+  <p class="phase-card__summary">{phase.summary}</p>
+
+  <ul class="phase-card__list">
+    {phase.details.map((d) => <li>{d}</li>)}
+  </ul>
+</article>
+
+<style>
+  .phase-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.4rem, 3vw, 2rem);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+  }
+  .phase-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: var(--grad-brand);
+  }
+  .phase-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .phase-card__num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brand-600);
+  }
+  .phase-card__status {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.22rem 0.55rem;
+    border-radius: 999px;
+  }
+  .phase-card__status.is-ok {
+    background: color-mix(in srgb, var(--accent-500) 16%, transparent);
+    color: color-mix(in srgb, var(--accent-500) 92%, black 30%);
+  }
+  .phase-card__status.is-tbd {
+    background: var(--paper-tint);
+    color: var(--ink-mute);
+  }
+  .phase-card__dates {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .phase-card__format {
+    font-size: 0.9rem;
+    color: var(--ink-mute);
+  }
+  .phase-card__summary {
+    color: var(--ink-soft);
+  }
+  .phase-card__list {
+    margin: 0.3rem 0 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+  .phase-card__list li::marker {
+    color: var(--brand-500);
+  }
+</style>

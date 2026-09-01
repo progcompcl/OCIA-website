@@ -1,0 +1,170 @@
+---
+import Logo from './Logo.astro';
+import { nav, site } from '../data/site.ts';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+---
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a href="/" class="site-header__brand" aria-label={`${site.name} — inicio`}>
+      <Logo />
+    </a>
+
+    <nav class="site-nav" aria-label="Principal">
+      <button
+        class="site-nav__toggle"
+        aria-expanded="false"
+        aria-controls="site-nav-list"
+        aria-label="Abrir menú"
+      >
+        <span></span><span></span><span></span>
+      </button>
+      <ul id="site-nav-list" class="site-nav__list">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        <li class="site-nav__cta">
+          <a class="btn btn--primary" href={site.registerUrl}>Inscríbete</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: var(--step-nav);
+  }
+  .site-header__brand {
+    text-decoration: none;
+  }
+  .site-nav__list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0;
+    margin: 0;
+  }
+  .site-nav__list a:not(.btn) {
+    display: inline-block;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+  .site-nav__list a:not(.btn):hover {
+    color: var(--brand-600);
+    background: var(--brand-050);
+  }
+  .site-nav__list a[aria-current='page'] {
+    color: var(--brand-700);
+    background: var(--brand-050);
+  }
+  .site-nav__cta {
+    margin-left: 0.4rem;
+  }
+  .site-nav__toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .site-nav__toggle span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    margin-inline: auto;
+    background: var(--ink);
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  @media (max-width: 900px) {
+    .site-nav__toggle {
+      display: flex;
+    }
+    .site-nav__list {
+      position: absolute;
+      inset: var(--step-nav) 0 auto 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.15rem;
+      padding: 0.8rem clamp(1.1rem, 5vw, 2rem) 1.2rem;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .site-nav[data-open='true'] .site-nav__list {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .site-nav[data-open='true'] .site-nav__toggle span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .site-nav[data-open='true'] .site-nav__toggle span:nth-child(2) {
+      opacity: 0;
+    }
+    .site-nav[data-open='true'] .site-nav__toggle span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+    .site-nav__list a:not(.btn) {
+      padding: 0.7rem;
+      font-size: 1rem;
+    }
+    .site-nav__cta {
+      margin: 0.4rem 0 0;
+    }
+    .site-nav__cta .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('.site-nav');
+  const toggle = nav?.querySelector<HTMLButtonElement>('.site-nav__toggle');
+  toggle?.addEventListener('click', () => {
+    const open = nav!.dataset.open === 'true';
+    nav!.dataset.open = String(!open);
+    toggle.setAttribute('aria-expanded', String(!open));
+    toggle.setAttribute('aria-label', open ? 'Abrir menú' : 'Cerrar menú');
+  });
+</script>

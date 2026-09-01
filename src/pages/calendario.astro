@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Timeline from '../components/Timeline.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Callout from '../components/Callout.astro';
+---
+
+<BaseLayout
+  title="Calendario"
+  description="Fechas clave de la OCIA 2026-2027: inscripciones, Fase 1, Fase 2 y el camino a la IOAI 2027."
+>
+  <PageHero
+    eyebrow="Calendario"
+    title="Fechas clave 2026–2027"
+    lead="Las fechas de 2026 siguen el calendario de la 3ª ONIA de Brasil. Las actividades del Ciclo Preparatorio se confirmarán durante el primer semestre de 2027."
+  />
+
+  <section class="section">
+    <div class="wrap wrap--narrow">
+      <Timeline />
+      <div class="cal-note">
+        <Callout title="Estado de las fechas" tone="note">
+          Las marcas indicadas como <em>por confirmar</em> dependen del reglamento oficial y del
+          calendario definitivo de la organización.
+        </Callout>
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .cal-note {
+    margin-top: 2.5rem;
+  }
+</style>

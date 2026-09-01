@@ -1,0 +1,58 @@
+---
+import NeuralField from './NeuralField.astro';
+import { site } from '../data/site.ts';
+interface Props {
+  title?: string;
+  text?: string;
+}
+const {
+  title = '¿Te interesa la inteligencia artificial?',
+  text = 'La inscripción es gratuita y abierta a estudiantes de 7° básico a 4° medio, y a docentes en la Categoría Libre.',
+} = Astro.props;
+---
+
+<section class="cta-banner">
+  <NeuralField />
+  <div class="wrap cta-banner__inner">
+    <h2>{title}</h2>
+    <p>{text}</p>
+    <div class="cta-banner__actions">
+      <a class="btn btn--primary" href={site.registerUrl}>Inscríbete</a>
+      <a class="btn btn--on-dark" href="/fases/">Conoce las fases</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-banner {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--grad-ink);
+    color: var(--night-ink);
+    padding-block: clamp(3rem, 7vw, 5rem);
+    text-align: center;
+  }
+  .cta-banner__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .cta-banner h2 {
+    color: var(--night-ink);
+  }
+  .cta-banner p {
+    max-width: 48ch;
+    color: var(--night-mute);
+  }
+  .cta-banner__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+    margin-top: 0.6rem;
+  }
+</style>

@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Callout from '../components/Callout.astro';
+import { categories } from '../data/categories.ts';
+---
+
+<BaseLayout
+  title="Categorías"
+  description="Categorías de participación de la OCIA: Enseñanza Básica, Enseñanza Media y Categoría Libre para docentes y público general."
+>
+  <PageHero
+    eyebrow="Categorías"
+    title="Quién puede participar"
+    lead="La OCIA tiene tres categorías. Las de Enseñanza Básica y Media compiten por medallas y por un lugar en el Equipo Chile; la Categoría Libre está pensada para aprender."
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <div class="grid grid--3">
+        {
+          categories.map((cat) => (
+            <article class="card cat">
+              <h2>{cat.name}</h2>
+              <p class="cat__who">{cat.who}</p>
+              <p class="cat__detail">{cat.detail}</p>
+              <dl class="cat__meta">
+                <div>
+                  <dt>Medallas</dt>
+                  <dd data-on={cat.medals}>{cat.medals ? 'Sí' : 'No'}</dd>
+                </div>
+                <div>
+                  <dt>Clasifica a la IOAI</dt>
+                  <dd data-on={cat.toIOAI}>{cat.toIOAI ? 'Sí' : 'No'}</dd>
+                </div>
+              </dl>
+            </article>
+          ))
+        }
+      </div>
+
+      <Callout title="Rangos de curso" tone="note">
+        Los rangos de curso indicados son una adaptación preliminar del modelo de la ONIA (Brasil) al
+        sistema escolar chileno. Los valores definitivos se publicarán en el reglamento oficial.
+      </Callout>
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .cat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .cat__who {
+    font-weight: 600;
+    color: var(--brand-700);
+  }
+  .cat__detail {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .cat__meta {
+    display: flex;
+    gap: 1.6rem;
+    margin: 0.6rem 0 0;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+  }
+  .cat__meta dt {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .cat__meta dd {
+    margin: 0.15rem 0 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--ink-mute);
+  }
+  .cat__meta dd[data-on='true'] {
+    color: var(--brand-600);
+  }
+  .card + :global(.callout) {
+    margin-top: 1.6rem;
+  }
+</style>

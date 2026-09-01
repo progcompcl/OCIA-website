@@ -1,0 +1,80 @@
+---
+import { timeline } from '../data/timeline.ts';
+---
+
+<ol class="timeline">
+  {
+    timeline.map((item) => (
+      <li class:list={['timeline__item', `is-${item.status.replace(/\s/g, '-')}`]}>
+        <div class="timeline__marker" aria-hidden="true" />
+        <div class="timeline__content">
+          <p class="timeline__date">{item.date}</p>
+          <h3 class="timeline__title">{item.title}</h3>
+          <p class="timeline__desc">{item.description}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: linear-gradient(var(--brand-300), var(--line));
+  }
+  .timeline__item {
+    position: relative;
+    padding: 0 0 1.8rem 2.2rem;
+  }
+  .timeline__item:last-child {
+    padding-bottom: 0;
+  }
+  .timeline__marker {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 3px solid var(--brand-500);
+  }
+  .timeline__item.is-hito .timeline__marker {
+    background: var(--grad-brand);
+    border-color: transparent;
+  }
+  .timeline__item.is-por-confirmar .timeline__marker {
+    border-color: var(--ink-mute);
+  }
+  .timeline__date {
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brand-600);
+  }
+  .timeline__item.is-por-confirmar .timeline__date {
+    color: var(--ink-mute);
+  }
+  .timeline__title {
+    font-size: 1.08rem;
+    margin: 0.15rem 0 0.2rem;
+  }
+  .timeline__desc {
+    font-size: 0.93rem;
+    color: var(--ink-soft);
+    max-width: 52ch;
+  }
+</style>

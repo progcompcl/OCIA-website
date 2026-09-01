@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import PhaseCard from '../components/PhaseCard.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import Callout from '../components/Callout.astro';
+import { phases, cycles } from '../data/phases.ts';
+
+const byCycle = cycles.map((c) => ({
+  ...c,
+  phases: phases.filter((p) => p.cycle === c.name),
+}));
+---
+
+<BaseLayout
+  title="Fases"
+  description="Las cuatro fases de la OCIA en dos ciclos: Alfabetización Digital, Profundización Técnica, Desarrollo de Competencias y Entrenamiento IOAI."
+>
+  <PageHero
+    eyebrow="Fases"
+    title="El recorrido de la competencia"
+    lead="Cuatro fases organizadas en dos ciclos. Las fechas de 2026 están confirmadas y siguen el calendario de la 3ª ONIA de Brasil; las de 2027 se anunciarán más adelante."
+  />
+
+  {
+    byCycle.map((c, i) => (
+      <section class:list={['section cycle', { 'section--tint': i % 2 === 1 }]}>
+        <div class="wrap">
+          <div class="cycle__head">
+            <span class="eyebrow">{c.name}</span>
+            <p class="lead">{c.blurb}</p>
+          </div>
+          <div class="grid grid--2">
+            {c.phases.map((phase) => (
+              <PhaseCard phase={phase} />
+            ))}
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section section--tint">
+    <div class="wrap wrap--narrow">
+      <Callout title="Sobre las fechas de 2027">
+        Las Fases 3 y 4 se realizarán durante el primer semestre de 2027. Las fechas exactas, el
+        formato de las evaluaciones y los cupos de avance se publicarán en el reglamento oficial.
+      </Callout>
+    </div>
+  </section>
+
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .cycle__head {
+    max-width: 46rem;
+    margin-bottom: 2rem;
+    display: grid;
+    gap: 0.8rem;
+  }
+</style>

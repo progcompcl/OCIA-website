@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site.ts';
+
+const channels = [
+  { label: 'Correo', value: site.email, href: `mailto:${site.email}` },
+  { label: 'Instagram', value: '@progcompcl', href: site.social.instagram },
+  { label: 'GitHub', value: 'progcompcl', href: site.social.github },
+];
+---
+
+<BaseLayout
+  title="Contacto"
+  description="Cómo contactar al equipo organizador de la Olimpiada Chilena de Inteligencia Artificial."
+>
+  <PageHero
+    eyebrow="Contacto"
+    title="Escríbenos"
+    lead="¿Eres estudiante, docente o representas a un establecimiento? Estamos disponibles para resolver dudas sobre la OCIA."
+  />
+
+  <section class="section">
+    <div class="wrap wrap--narrow">
+      <dl class="contact">
+        {
+          channels.map((c) => (
+            <div class="contact__row">
+              <dt>{c.label}</dt>
+              <dd>
+                <a href={c.href}>{c.value}</a>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <p class="contact__org">
+        La OCIA es organizada por la
+        <a href={site.organizerUrl}>{site.organizer}</a>.
+      </p>
+
+      <p class="contact__org">
+        ¿Quieres inscribirte? Ve directamente a la
+        <a href="/inscripcion/">página de inscripción</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact {
+    display: grid;
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .contact__row {
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+    gap: 1rem;
+    padding: 1.1rem 1.4rem;
+    border-top: 1px solid var(--line);
+  }
+  .contact__row:first-child {
+    border-top: none;
+  }
+  .contact__row dt {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--ink-mute);
+  }
+  .contact__row dd {
+    margin: 0;
+  }
+  .contact__org {
+    margin-top: 2rem;
+    color: var(--ink-soft);
+  }
+  .contact__todo {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--ink-mute);
+  }
+  @media (max-width: 560px) {
+    .contact__row {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+  }
+</style>

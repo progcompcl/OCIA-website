@@ -1,0 +1,368 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NeuralField from '../components/NeuralField.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import PhaseCard from '../components/PhaseCard.astro';
+import Timeline from '../components/Timeline.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import { site } from '../data/site.ts';
+import { phases, cycles } from '../data/phases.ts';
+import { categories } from '../data/categories.ts';
+
+const noticias = (await getCollection('noticias', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const dateFmt = new Intl.DateTimeFormat('es-CL', { day: 'numeric', month: 'long', year: 'numeric' });
+
+const heroFacts = [
+  { k: 'Fase 1', v: '8–20 sep 2026' },
+  { k: 'Modalidad', v: 'En línea y gratuita' },
+  { k: 'Meta', v: 'Equipo Chile · IOAI 2027' },
+];
+---
+
+<BaseLayout>
+  <section class="hero">
+    <NeuralField />
+    <div class="wrap hero__inner">
+      <span class="hero__badge">{site.edition} · Primera edición</span>
+      <h1>
+        La primera <span class="hero__grad">Olimpiada Chilena<br />de Inteligencia Artificial</span>
+      </h1>
+      <p class="hero__lead">
+        Una competencia nacional, gratuita y voluntaria para estudiantes de 7° básico a 4° medio.
+        Aprende sobre IA, avanza por sus fases y compite por un lugar en el equipo que representará a
+        Chile en la <strong>IOAI 2027</strong>.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href={site.registerUrl}>Inscríbete</a>
+        <a class="btn btn--on-dark" href="/acerca/">Qué es la OCIA</a>
+      </div>
+      <dl class="hero__facts">
+        {
+          heroFacts.map((f) => (
+            <div>
+              <dt>{f.k}</dt>
+              <dd>{f.v}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <SectionHeading
+        eyebrow="Qué es"
+        title="Una puerta de entrada a la inteligencia artificial"
+        lead="La OCIA busca promover la alfabetización en IA en todo Chile, revelar talentos y construir el camino hacia la olimpiada internacional. Está organizada por la Sociedad Chilena de Programación Competitiva."
+      />
+      <div class="grid grid--3 feature-grid">
+        <div class="card">
+          <h3>Para todas y todos</h3>
+          <p>
+            Gratuita y voluntaria. La Fase 1 no requiere conocimientos previos: solo curiosidad por
+            entender cómo funciona la IA.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Cuatro fases, dos ciclos</h3>
+          <p>
+            Un recorrido progresivo, desde la alfabetización digital hasta el entrenamiento de nivel
+            internacional.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Rumbo a la IOAI</h3>
+          <p>
+            Las y los 4 mejores de la Fase 4 conforman el Equipo Chile para la Olimpiada Internacional
+            de Inteligencia Artificial 2027.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="wrap">
+      <SectionHeading eyebrow="Cómo funciona" title="Las fases de la competencia" />
+      <div class="cycles">
+        {
+          cycles.map((c) => (
+            <p class="cycles__item">
+              <strong>{c.name}.</strong> {c.blurb}
+            </p>
+          ))
+        }
+      </div>
+      <div class="grid grid--2 phase-grid">
+        {phases.map((phase) => <PhaseCard phase={phase} />)}
+      </div>
+      <p class="section__more">
+        <a href="/fases/">Ver el detalle de cada fase →</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <SectionHeading
+        eyebrow="Quién puede participar"
+        title="Categorías"
+        lead="Adaptadas al sistema escolar chileno. Los rangos de curso exactos se confirmarán en el reglamento."
+      />
+      <div class="grid grid--3">
+        {
+          categories.map((cat) => (
+            <article class="card cat-card">
+              <h3>{cat.name}</h3>
+              <p class="cat-card__who">{cat.who}</p>
+              <p>{cat.detail}</p>
+              <ul class="cat-card__tags">
+                <li data-on={cat.medals}>{cat.medals ? 'Opta a medallas' : 'Sin medallas'}</li>
+                <li data-on={cat.toIOAI}>
+                  {cat.toIOAI ? 'Puede clasificar a la IOAI' : 'No clasifica a la IOAI'}
+                </li>
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="wrap calendar-block">
+      <div>
+        <SectionHeading
+          eyebrow="Calendario"
+          title="Fechas clave 2026–2027"
+          lead="Alineadas con la 3ª ONIA de Brasil. Las fases del Ciclo Preparatorio se confirmarán más adelante."
+        />
+        <p class="section__more"><a href="/calendario/">Calendario completo →</a></p>
+      </div>
+      <Timeline />
+    </div>
+  </section>
+
+  {
+    noticias.length > 0 && (
+      <section class="section">
+        <div class="wrap">
+          <SectionHeading eyebrow="Prensa" title="Últimas noticias" />
+          <div class="grid grid--3">
+            {noticias.map((n) => (
+              <a class="card news-card" href={`/prensa/${n.id}/`}>
+                <span class="pill">{n.data.tag}</span>
+                <h3>{n.data.title}</h3>
+                <p>{n.data.summary}</p>
+                <time datetime={n.data.date.toISOString()}>{dateFmt.format(n.data.date)}</time>
+              </a>
+            ))}
+          </div>
+          <p class="section__more">
+            <a href="/prensa/">Ver todas las noticias →</a>
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--grad-ink);
+    color: var(--night-ink);
+    padding-block: clamp(3.5rem, 10vw, 7rem);
+  }
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 44rem;
+  }
+  .hero__badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--night-line);
+    border-radius: 999px;
+    color: var(--night-mute);
+  }
+  .hero h1 {
+    color: var(--night-ink);
+    margin-top: 1.2rem;
+  }
+  .hero__grad {
+    background: linear-gradient(100deg, #b8a6ff, #6ee7ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero__lead {
+    margin-top: 1.2rem;
+    font-size: clamp(1.05rem, 1rem + 0.5vw, 1.25rem);
+    color: var(--night-mute);
+    max-width: 40rem;
+  }
+  .hero__lead strong {
+    color: var(--night-ink);
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.8rem;
+  }
+  .hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 2.6rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--night-line);
+  }
+  .hero__facts dt {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--night-mute);
+  }
+  .hero__facts dd {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--night-ink);
+  }
+
+  .feature-grid {
+    margin-top: 2.6rem;
+  }
+  .feature-grid h3 {
+    margin-bottom: 0.4rem;
+  }
+  .feature-grid p {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  .cycles {
+    display: grid;
+    gap: 0.6rem;
+    margin: 1.8rem 0 2rem;
+    max-width: 60rem;
+  }
+  .cycles__item {
+    color: var(--ink-soft);
+  }
+  .cycles__item strong {
+    color: var(--ink);
+    font-family: var(--font-display);
+  }
+  .phase-grid {
+    margin-top: 0.5rem;
+  }
+
+  .section__more {
+    margin-top: 1.8rem;
+  }
+  .section__more a {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .cat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .cat-card__who {
+    font-weight: 600;
+    color: var(--brand-700);
+  }
+  .cat-card p {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .cat-card__tags {
+    list-style: none;
+    padding: 0;
+    margin: 0.4rem 0 0;
+    display: grid;
+    gap: 0.4rem;
+  }
+  .cat-card__tags li {
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding-left: 1.4rem;
+    position: relative;
+    color: var(--ink-mute);
+  }
+  .cat-card__tags li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.35em;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--line);
+  }
+  .cat-card__tags li[data-on='true'] {
+    color: var(--ink-soft);
+  }
+  .cat-card__tags li[data-on='true']::before {
+    background: var(--grad-brand);
+    border-color: transparent;
+  }
+
+  .calendar-block {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 6vw, 4rem);
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .calendar-block {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .news-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+  }
+  .news-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+  .news-card h3 {
+    font-size: 1.05rem;
+  }
+  .news-card p {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+  .news-card time {
+    font-size: 0.82rem;
+    color: var(--ink-mute);
+    margin-top: auto;
+  }
+</style>
